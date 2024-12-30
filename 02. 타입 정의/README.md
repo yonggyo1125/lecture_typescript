@@ -6,28 +6,28 @@
 ```javascript
 // firstName 뒤에 string 타입을 붙여, 문자열 이외의 값을 전달하지 못하게 할 수 있다.
 function sayHello(firstName: string) {
-  console.log('Hello ' + firstName)
+  console.log("Hello " + firstName);
 }
 
-let firstName: string = 'Hana'
-sayHello(firstName)
+let firstName: string = "Hana";
+sayHello(firstName);
 ```
 
 - 타입 애너테이션에 반환할 값을 대입하면 타입스크립트 컴파일 시 에러가 발생합니다. 예를 들어 `string` 타입을 받는 것으로 정의한 코드에 `number` 타입의 변수를 대입하면 컴파일 시 다음과 같은 에러가 발생합니다.
 
 ```javascript
-let age: number = 36
-sayHello(age)
+let age: number = 36;
+sayHello(age);
 ```
 
 - 또 다른 타입 정의의 예를 소개합니다. 문자열을 정의하고, 그 변수에 대해 함수로 호출하면 에러가 발생합니다. 타입스크립트는 정적 타입으로 컴파일을 전제로 하는 언어이므로, 컴파일 에러를 통해 문제점을 파악할 수 있습니다.
 
 ```javascript
-const message = 'hello!'
+const message = "hello!";
 
 // 자바스크립트에는 실행 시에 에러가 발생하는 것에 비해, 타입스크립트에서는 컴파일 시에 다음과 같은 에러가 발생한다.
 // error TS2349: This expression is not callable. Type 'String' has no call signatures.
-message()
+message();
 ```
 
 - 여기까지 소개한 예시들은 매우 간단한 것들입니다. 이것만으로는 타입스크립트의 장점을 느끼기 어려울 것입니다.
@@ -40,28 +40,28 @@ message()
 - 변수 선언에는 `var`, `let`, `const`를 사용합니다. 변수명 뒤에 **: 타입**을 추가해 타입 애너테이션을 합니다(생략 가능). 타입스크립트의 변수는 자바스크립트와 마찬가지로 `var` 키워드를 사용해서 선언합니다. 스코프 규칙이나 대입 시 작동은 자바스크립트의 그것과 같습니다. ES6에서는 자바스크립트에 `let`과 `const`라는 키워드를 사용하는 두 가지 새로운 변수 선언이 도입됐습니다. 자바스크립트 수퍼셋인 타입스크립트 역시 이 새로운 타입의 변수 선언을 지원합니다.
 
 ```javascript
-var 변수: 타입 = 값
-let 변수: 타입 = 값
-const 변수: 타입 = 값
-let employeeName = 'John'
+var 변수: 타입 = 값;
+let 변수: 타입 = 값;
+const 변수: 타입 = 값;
+let employeeName = "John";
 // 또는
-let employeeName: string = 'John'
+let employeeName: string = "John";
 ```
 
 - `let`을 사용해 변수를 선언할 경우, var로 선언된 변수의 스코프가 해당 변수를 포함하는 함수에서까지 사용할 수 있는 반면, 블록 스코프로 선언된 변수는 해당 변수를 포함하는 블록 안에서만 사용할 수 있습니다.
 
 ```javascript
 function calc(isSum: boolean) {
-    let a = 100
-    if (isSum) {
-        // a가 정의된 안쪽의 블록 스코프 안의 사용이므로 에러가 발생하지 않는다. 
-        let b = a + 1
-        return b
-    }
+  let a = 100;
+  if (isSum) {
+    // a가 정의된 안쪽의 블록 스코프 안의 사용이므로 에러가 발생하지 않는다.
+    let b = a + 1;
+    return b;
+  }
 
-    // error TS2304: Cannot find name 'b'.
-    // var로 정의한 경우는 에러가 발생하지 않지만, let으로 정의했을 때는 에러가 발생한다.
-    return b
+  // error TS2304: Cannot find name 'b'.
+  // var로 정의한 경우는 에러가 발생하지 않지만, let으로 정의했을 때는 에러가 발생한다.
+  return b;
 }
 ```
 
@@ -69,13 +69,52 @@ function calc(isSum: boolean) {
 - const 변수는 let 변수와 같은 스코프 규칙을 갖습니다.
 
 ```javascript
-const num: number = 100
+const num: number = 100;
 
 // 값을 재대입하면 컴파일러 에러가 된다.
-num = 200
+num = 200;
 ```
 
 - 현재의 웹 프런트앤드 개발에서는 주로 let, const를 사용합니다.
 
-
 ### 원시 타입
+
+- 자바스크립트에서 자주 사용되는 원시(primitive) 타입인 string(문자열), number(수치), boolean(논리값)은 타입스크립트에 대응하는 타입이 있습니다. 이 타입들은 자바스크립트의 typeof 연산자를 사용할 때 표시되는 이름과 같습니다.
+
+```javascript
+let age: number = 36;
+let isDone: boolean = false;
+let color: string = "파랑";
+```
+
+- 다른 타입의 값을 대입하고자 할 때는 에러가 발생합니다. 위와 같이 타입을 붙여 대입한 변수는 이후 정적 타입의 대상이 됩니다.
+
+```javascript
+let mynumber: string = "200";
+mynumber = "이백"; // string 타입이므로 문제없이 대입할 수 있다.
+mynumber = 200; // string 타입 변수에 number 타입을 대입하려 하면 컴파일러 에러가 발생한다. Type 'number' is not assignable to type 'string'.
+```
+
+### 배열
+
+- 배열에 타입을 지정할 때는 그 배열을 구성하는 타입과 \[\] 표기를 사용합니다. 예를 들어, number의 배열이라면 number\[\]라는 구문을 사용합니다.
+
+```javascript
+const array: string[] = [];
+array.push("abc");
+array.push(1); // 배열 타입과 맞지 않으므로 에러가 된다.
+```
+
+- 이 구문은 string\[\]등 원시 타입 외에도 뒤에서 설명할 인터페이스나 타입 앨리어스(type alias) 등에도 대응합니다. User[] 등과 같이 표기할 수도 있습니다.
+- 배열은 \[\]를 사용하는 방법 이외에 Array\<string\>과 같은 제네릭으로 표기할 수도 있습니다.
+- \['foo', 1\]과 같이 여러 타입이 있는 배열인 경우에는 Union 타입이나 튜플(Tuple)을 사용해 다음과 같이 표기할 수 있습니다.
+
+```javascript
+const mixedArray = ["foo", 1];
+const mixedArrayU: (string | number)[] = ["foo", 1]; // Union 타입
+const mixedArrayT: [string, number] = ["foo", 1]; // 튜플
+```
+
+### 객체 타입
+
+- 객체(object)는 키(key)와 값(value)을 이용한 데이터 형식 인스턴스입니다. 타입스크립트는 다음과 같이 키 이름과 값의 쌍을 지정해 객체 타입을 정의할 수 있습니다.
