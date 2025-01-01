@@ -118,3 +118,147 @@ const mixedArrayT: [string, number] = ["foo", 1]; // 튜플
 ### 객체 타입
 
 - 객체(object)는 키(key)와 값(value)을 이용한 데이터 형식 인스턴스입니다. 타입스크립트는 다음과 같이 키 이름과 값의 쌍을 지정해 객체 타입을 정의할 수 있습니다.
+
+```javascript
+{ 키_이름_1: 값1; 키_이름_2: 값_2; ...}
+let 변수: { 키명_1: 타입_1; 키명_2: 타입_2; ... } = 객체
+const 변수: { 키명_1: 타입_1; 키명_2: 타입_2; ... } = 객체
+var 변수: { 키명_1: 타입_1; 키명_2: 타입_2; ... } = 객체
+``` 
+
+- 다음은 객체 타입 정의 예시입니다.
+
+```javascript
+// string 타입의 name과 number 타입의 age를 가진 객체 타입을 정의한다
+const user: { name: string; age: number } = {
+  name: 'Hana',
+  age: 36
+}
+
+console.log(user.name)
+console.log(user.age)
+```
+
+- 객체 타입은 일부 또는 모든 속성을 ? 를 사용해 옵셔널(optional, 선택 가능) 속성으로 지정할 수 있습니다. 옵셔널 속성으로 타입을 정의하면 해당 속성이 존재하지 않아도 문제없이 작동합니다. 
+
+```javascript
+function printName(obj: { firstName: string; lastName?: string}) {
+  // ...
+}
+
+// 다음 패턴은 모두 정상 작동한다
+printName({ firstName: 'Hana' })
+printName({ firstName: 'Hana', lastName: 'Kim' })
+```
+
+- 객체 타입은 코드가 길어지기 때문에 타입 앨리어스와 함께 사용하는 경우가 많습니다. 
+
+### any
+- 타입스크립트에서는 `any`라 불리는 특별한 타입이 있습니다. 이름 그대로 모든 타입을 허용하는 타입입니다. 특정한 값에 대해 타입 체크 구조를 적용하고 싶지 않을 때 사용합니다.
+
+```javascript
+let user: any = { firstName: 'Hana' }
+// 다음 행의 코드는 모두 컴파일러 에러가 발생하지 않는다.
+user.hello()
+user()
+user.age = 100
+user = 'hello'
+
+// 다른 타입으로 대입해도 에러가 발생하지 않는다. 
+const n: number = user
+```
+
+- `any`를 사용하면 타입 체크 기능이 작동하지 않게 됩니다. 따라서 타입스크립트를 사용하는 장점을 활용할 수 없습니다. 자바스크립트 프로젝트를 타입스크립트로 마이그레이션하는 과정이 아닌 한, 기본적으로는 `any`를 사용하지 않는 것이 바람직합니다.
+
+### 함수
+
+- 타입스크립트의 함수에서는 인수와 반환값의 타입을 지정할 수 있습니다.
+
+```javascript
+function(인수_1: 타입_1, 인수_2: 타입_2 ...): 반환값 {
+  // ...
+}
+```
+
+- 다음 코드는 함수의 인수와 반환값에 string을 정의한 예시입니다.
+
+```javascript
+function sayHello(name: string): string {
+  return `Hello ${name}`
+}
+
+sayHello('Hana')
+```
+
+- 옵셔널 인수도 정의할 수 있습니다. 옵셔널 인수는 인수명 뒤에 ?를 붙입니다.
+
+```javascript
+function sayHello(name: string, greeting?: string): string {
+  return `${greeting} ${name}`
+}
+
+// 다음은 모두 문제없이 작동한다
+sayHello('Hana')
+sayHello('Hana', 'Hello') // Hello Hana
+```
+
+- 인수를 정의할 때 기본값을 지정할 수 있습니다. 함수를 호출할 때 해당 인수를 지정하지 않으면 기본값이 설정됩니다.
+
+```javascript
+function sayHello(name: string, greeting: string = 'Hello'): string {
+  return `${greeting} ${name}`
+}
+
+// 다음은 모두 문제없이 작동한다
+sayHello('Hana') // Hello Hana
+sayHello('Hana', 'Hey') // Hey Hana
+```
+
+- 인수나 반환값의 타입에 다양한 타입을 지정할 수 있습니다. 다음은 함수를 인수로 받는 함수의 타입 지정 예시입니다.
+
+```javascript
+// 이름과 포맷 함수를 인수로 받아 포매팅한 뒤 콘솔에 출력하는 함수를 정의한다. 
+function printName(firstName: string, formatter: (name: string) => string) {
+  console.log(formatter(firstName))
+}
+
+// '씨'를 뒤에 붙이는 이름 포맷 함수를 정의한다
+function formatName(name: string): string {
+  return `${name} 씨`
+}
+
+printName('홍길동', formatName) // 홍길동 씨 
+```
+
+- 화살표 함수(arrow function)의 경우는 다음과 같이 타입을 지정합니다.
+
+```javascript
+(인수명: 인수_타입): 반환값_타입 => 자바스크립트_식
+let sayHello = (name: string): string => `Hello ${name}`
+```
+
+#### 함수 타입
+- 지금까지 함수의 인수나 반환값에 타입을 붙이는 내용에 관해 주로 설명했습니다. 타입스크립트(자바스크립트)는 인수에도 함수를 사용할 수 있습니다. 함수 그 자체의 타입을 기입하는 방법을 소개합니다.
+- 다음과 같은 표기법으로 함수 타입을 나타냅니다. **인수명**은 실제 함수의 인수명과 대응할 필요는 없습니다.
+
+```javascript
+(인수명: 인수_타입) => 반환값_타입
+```
+
+- 다음 코드는 예시입니다. **singBirds**는 인수가 문자열이고 반환값이 배열(문자열 배열)인 함수를 인수로 받습니다.
+
+```javascript
+function genBirdsInfo(name: string): string[] {
+  return name.split(',')
+}
+
+// 함수 타입을 사용
+// (x: string) => string[]
+function singBirds(birdInfo: (x: string) => string[]): string {
+  return birdInfo('오리,비둘기')[0] + ' 꽥꽥'
+}
+
+console.log(singBirds(genBirdsInfo)) // "오리 꽥꽥"
+console.log(singBirds('참새'))  // 타입이 맞지 않으므로 에러
+```
+
