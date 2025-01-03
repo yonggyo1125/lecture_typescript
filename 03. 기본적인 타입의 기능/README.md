@@ -166,3 +166,51 @@ const foo: Label = {
 ```
 
 ### 인터페이스
+
+- 타입스크립트의 인터페이스(interface)는 타입 앨리어스와 비슷한 기능이지만, 보다 확장성이 높은 열린 기능을 갖고 있습니다. 클래스와 함께 많이 사용합니다. 인터페이스로 객체 타입을 지정할 때는 다음과 같이 사용합니다. type과 비슷하지만 =가 필요하지 않고, 반드시 {로 타입 정의가 시작되어야 하는 등 몇 가지 차이가 있습니다.
+
+```javascript
+interface 타입명 {
+  속성_1: 타입_1;
+  속성_2: 타입_2;
+}
+``` 
+
+- 실제로 인터페이스를 사용해 봅니다. 다음 코드는 좌표 x와 y를 갖는 Point 인터페이스를 작성하고, 나중에 좌표 z를 추가하는 예시입니다. 
+
+```javascript
+interace Point {
+  x: number;
+  y: number;
+}
+
+function printPoint(point: Point) {
+  console.log(`x 좌표는 ${point.x}입니다`)
+  console.log(`y 좌표는 ${point.y}입니다`)
+  console.log(`z 좌표는 ${point.z}입니다`)
+}
+
+interface Point {
+  z: number;
+}
+
+// 인수의 객체에 z가 존재하지 않으므로 컴파일 시 에러가 된다
+
+printPoint({x: 100, y: 100})
+
+// 문제없이 작동한다. 
+printPoint({ x: 100, y: 100, z: 200 })
+``` 
+
+- Point에 나중에 z를 추가한 것처럼 인터페이스를 확장할 수 있습니다. 타입 앨리어스를 사용할 때는 나중에 같은 이름으로 타입을 정의할 수 없습니다.
+- 인터페이스에서는 클래스의 작동 타입을 정의하고, implements를 사용해 클래스에 구현을 위임할 수 있습니다.
+
+```javascript
+interface Point {
+  x: number;
+  y: number;
+  z: number;
+}
+
+// 클래스가 인터페이스를 implements했을 때 
+```
