@@ -220,3 +220,45 @@ class MyPoint implements를 Point {
 ```
 
 - 속성 정의에 ?를 사용하면 옵셔널(생략 가능) 속성이 됩니다.
+
+```javascript
+interface Point {
+  x: number;
+  y: number;
+  z?: number;
+}
+
+// 에러는 발생하지 않는다.
+class MyPoint implements Point {
+  x: number
+  y: number
+}
+```
+
+- 또한 인터페이스에서는 extends를 사용해 다른 인터페이스를 확장할 수 있습니다.
+
+```javascript
+interface Colorful {
+  color: string;
+}
+
+interface Circle {
+  radius: number;
+}
+
+// 여러 인터페이스를 상속해서 새로운 인터페이스를 정의할 수 있다.
+interface ColorfulCircle extends Colorful, Circle {}
+
+const cc: ColorfulCircle = {
+  color: '빨강',
+  radius: 10,
+}
+```
+
+- 객체 타입을 정의할 떄 인터페이스와 앨리어스 모두 사용할 수 있으며, 상속에 관한 세세한 기능의 큰 차이는 없이 거의 비슷한 기능을 갖습니다.
+- 단, 타입스크립트의 설계 사상을 고려했을 때 이 2가지 기능은 다소 다른 점이 있습니다.
+- 인터페이스는 클래스나 데이터의 한쪽 측면을 정의한 타입, 즉 인터페이스에 매치하는 타입이라도 그 값 이외에 다른 필드나 메서드가 있음을 전제로 한 것입니다. 한편 타입 앨리어스는 객체의 타입 자체를 의미합니다.
+- 객체 그 자체가 아니라 클래스나 객체의 일부 속성이나 함수를 포함하는 일부 작동을 정의할 때는 인터페이스를 사용하는 것이 적합할 것입니다.
+
+### 클래스
+- 타입스크립트는 ES2015에서 자바스크립트에 도입된 클래스 표기법에 타입을 붙일 수 있습니다. 
